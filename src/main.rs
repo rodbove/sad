@@ -16,15 +16,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let exec_args: Vec<&str> = opts.command.split("/").collect();
 
-    for line in content.lines() {
-        if line.contains(exec_args[1]) {
-            let new_line = line.replace(exec_args[1], exec_args[2]);
-            println!("{}", new_line);
-        } else {
-            println!("{}", line);
-        }
-    }
+    sad::handle_exec_command(&content, &exec_args);
 
-    println!("{:?}", opts);
     Ok(())
 }
+
+// Comment test test
