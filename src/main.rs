@@ -21,7 +21,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let exec_args: Vec<&str> = opts.script.split("/").collect();
 
-    sad::handle_exec_command(&content, &exec_args);
+    let result = sad::handle_exec_command(&content, &exec_args);
+    println!("Result -> {:?}", result);
 
     Ok(())
 }
