@@ -23,11 +23,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let exec_args: Vec<&str> = opts.script.split("/").collect();
 
     let result = sad::handle_exec_command(&content, &exec_args).unwrap();
-    println!("Result -> {:?}", result);
 
     if opts.in_place {
         let mut file = File::create(&opts.file).unwrap();
-        writeln!(file, "{}", result);
+        if let Err(e) = writeln!(file, "{}", result) {
+            eprintln!("Error trying to write result to file: {}", e);
+        }
     }
 
     Ok(())
