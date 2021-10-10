@@ -1,4 +1,6 @@
 use std::path::PathBuf;
+use std::fs::File;
+use std::io::Write;
 use clap::Clap;
 use anyhow::{Context, Result};
 
@@ -15,14 +17,18 @@ struct Opts {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opts = Opts::parse();
-    println!("{}", opts.in_place);
     let content = std::fs::read_to_string(&opts.file)
         .with_context(|| format!("Unable to read content from file {:?}", &opts.file))?;
 
     let exec_args: Vec<&str> = opts.script.split("/").collect();
 
-    let result = sad::handle_exec_command(&content, &exec_args);
+    let result = sad::handle_exec_command(&content, &exec_args).unwrap();
     println!("Result -> {:?}", result);
+
+    if opts.in_place {
+        let mut file = File::create(&opts.file).unwrap();
+        writeln!(file, "{}", result);
+    }
 
     Ok(())
 }
